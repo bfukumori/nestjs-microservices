@@ -5,10 +5,24 @@ import { AppService } from './app.service';
 describe('AppController', () => {
   let app: TestingModule;
 
+  const kafkaMock = {
+    emit: jest.fn(),
+    send: jest.fn(),
+    connect: jest.fn(),
+    close: jest.fn(),
+    subscribeToResponseOf: jest.fn(),
+  };
+
   beforeAll(async () => {
     app = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [
+        AppService,
+        {
+          provide: 'KAFKA_SERVICE',
+          useValue: kafkaMock,
+        },
+      ],
     }).compile();
   });
 
